@@ -1,0 +1,8 @@
+text: here some the text
+author: author 1
+book: foo
+chapter: 2
+---
+text: some more text
+author: author 2
+---
