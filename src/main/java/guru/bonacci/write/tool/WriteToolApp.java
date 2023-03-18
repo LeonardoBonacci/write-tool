@@ -72,6 +72,8 @@ public class WriteToolApp implements CommandLineRunner {
   Quote buildQuote(Quote quote, String line) throws ParseException {
   	if (line.startsWith("text:")) {
   		quote.setText(line.replace("text:", "").trim());
+    } else if (line.startsWith(">")) {
+  		quote.setText(quote.getText() + "\n" + line.replace(">", "").trim());
     } else if (line.startsWith("author:")) {
   		quote.setAuthor(line.replace("author:", "").trim());
     } else if (line.startsWith("book:")) {
