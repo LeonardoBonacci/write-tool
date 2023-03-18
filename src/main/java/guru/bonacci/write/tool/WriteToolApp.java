@@ -3,6 +3,8 @@ package guru.bonacci.write.tool;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.boot.CommandLineRunner;
@@ -29,7 +31,7 @@ public class WriteToolApp implements CommandLineRunner {
 	final QuoteRepository repo;
 	
   @Override
-  public void run(String... args) throws IOException {
+  public void run(String... args) throws IOException, ParseException {
   	var pathOpt = Arrays.stream(args)
   		.filter(arg -> arg.startsWith("path="))
   		.map(arg -> arg.replace("path=", ""))
@@ -60,9 +62,14 @@ public class WriteToolApp implements CommandLineRunner {
   	repo.findByText(SEARCH_ON).forEach(System.out::println);
   	System.out.println("--------------------------");
   	repo.findByText(SEARCH_ON).map(Quote::getText).forEach(System.out::println);
+  	
+  	System.out.println("--------DATE-----------");
+  	var dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+  	repo.findAllByWhenBetween(dateFormat.parse("20-03-2023"), dateFormat.parse("01-01-2030")).forEach(System.out::println);
+
   }
   
-  Quote buildQuote(Quote quote, String line) {
+  Quote buildQuote(Quote quote, String line) throws ParseException {
   	if (line.startsWith("text:")) {
   		quote.setText(line.replace("text:", "").trim());
     } else if (line.startsWith("author:")) {
@@ -71,6 +78,8 @@ public class WriteToolApp implements CommandLineRunner {
   		quote.setBook(line.replace("book:", "").trim());
     } else if (line.startsWith("chapter:")) {
   		quote.setChapter(line.replace("chapter:", "").trim());
+    } else if (line.startsWith("when:")) {
+    	quote.setWhen(new SimpleDateFormat("dd-MM-yyyy").parse(line.replace("when:", "").trim()));
     }
 
   	return quote;

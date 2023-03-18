@@ -1,6 +1,9 @@
 package guru.bonacci.write.tool;
 
+import static org.springframework.data.elasticsearch.annotations.FieldType.Date;
 import static org.springframework.data.elasticsearch.annotations.FieldType.Text;
+
+import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -32,4 +35,7 @@ public class Quote {
 
 	@Field(type = Text)
   String chapter;
+	
+  @Field(type = Date)
+  private Date when;
 }
